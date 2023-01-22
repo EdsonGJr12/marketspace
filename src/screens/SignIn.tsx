@@ -4,7 +4,17 @@ import LogoSvg from "@assets/logo.svg";
 import { Input } from "@components/Form/Input";
 import { Button } from "@components/Form/Button";
 
+import { useNavigation } from '@react-navigation/native';
+import { AuthNavigatorRouteProps } from "@routes/auth.routes";
+
 export function SignIn() {
+
+    const navigation = useNavigation<AuthNavigatorRouteProps>();
+
+    function handleSignUp() {
+        navigation.navigate("SignUp");
+    }
+
     return (
         <VStack flex={1} bg="gray.700">
             <VStack
@@ -51,7 +61,11 @@ export function SignIn() {
                     Ainda não tem acesso?
                 </Text>
 
-                <Button title="Criar uma conta" type="tertiary" />
+                <Button
+                    title="Criar uma conta"
+                    type="tertiary"
+                    onPress={handleSignUp}
+                />
 
             </VStack>
 

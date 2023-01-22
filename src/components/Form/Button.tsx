@@ -5,9 +5,7 @@ type ButtonProps = IButtonProps & {
     type?: "primary" | "secondary" | "tertiary";
 };
 
-
-
-export function Button({ title, type = "primary" }: ButtonProps) {
+export function Button({ title, type = "primary", ...rest }: ButtonProps) {
 
     const theme = useTheme();
 
@@ -26,7 +24,6 @@ export function Button({ title, type = "primary" }: ButtonProps) {
         }
     };
 
-
     return (
         <NativeBaseButton
             w="full"
@@ -37,6 +34,7 @@ export function Button({ title, type = "primary" }: ButtonProps) {
             _pressed={{
                 bg: bgColor[type].pressed
             }}
+            {...rest}
         >
             <Text
                 color={type === "primary" || type === "secondary" ? "gray.700" : "gray.200"}

@@ -9,6 +9,7 @@ export function Input({ ...rest }: InputProps) {
         <InputNativeBase
             width="full"
             bg="gray.700"
+            borderWidth={0}
             rounded="md"
             mt={4}
             h={14}

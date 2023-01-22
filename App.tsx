@@ -4,6 +4,10 @@ import { Karla_400Regular, Karla_700Bold, useFonts } from "@expo-google-fonts/ka
 import { THEME } from "./src/theme";
 import { SignIn } from '@screens/SignIn';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { Routes } from '@routes/index';
+
+
 export default function App() {
 
   const [fontsLoaded] = useFonts({
@@ -17,7 +21,9 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={THEME}>
-      <SignIn />
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
     </NativeBaseProvider>
   );
 }
