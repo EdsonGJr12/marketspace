@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import {
     Avatar,
@@ -12,7 +12,8 @@ import {
     Input,
     Divider,
     Switch,
-    Checkbox
+    Checkbox,
+    FlatList
 } from "native-base";
 
 import { TouchableOpacity } from "react-native";
@@ -25,6 +26,10 @@ import avatarDefault from "@assets/avatar.png";
 
 import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
+import { api } from "@services/api";
+import { ProductDTO } from "src/dto/ProductDTO";
+import { ProductItemCard } from "@components/ProductItemCard";
 
 export function Home() {
 
@@ -36,6 +41,11 @@ export function Home() {
 
     const snapPoints = useMemo(() => ['50%', '75%'], []);
 
+    const { user } = useAuth();
+
+    const [numberOfActivePosts, setNumberofActivePosts] = useState(0);
+    const [products, setProducts] = useState<ProductDTO[]>([]);
+
     const handleOpenFilters = useCallback(() => {
         bottomSheetModalRef.current?.present();
     }, []);
@@ -43,6 +53,23 @@ export function Home() {
     const handleCloseFilters = useCallback(() => {
         bottomSheetModalRef.current?.dismiss();
     }, []);
+
+    async function loadUserProducts() {
+        const { data } = await api.get<ProductDTO[]>("/users/products");
+        const counter = data.filter(product => product.is_active === true).length;
+        setNumberofActivePosts(counter);
+    }
+
+    async function loadProducts() {
+        const { data } = await api.get<ProductDTO[]>("/products");
+        setProducts(data);
+    }
+
+    useEffect(() => {
+        loadUserProducts();
+        loadProducts();
+    }, []);
+
 
     return (
         <VStack
@@ -57,7 +84,10 @@ export function Home() {
                     width="1/2"
                     alignItems="center"
                 >
-                    <Avatar mr={2} source={avatarDefault} />
+                    <Avatar
+                        mr={2}
+                        source={user!.avatar ? { uri: `${api.defaults.baseURL}/images/${user!.avatar}` } : avatarDefault}
+                    />
 
                     <VStack>
                         <Text>
@@ -65,7 +95,7 @@ export function Home() {
                         </Text>
 
                         <Heading fontSize="md">
-                            Maria!
+                            {user!.name}!
                         </Heading>
                     </VStack>
                 </HStack>
@@ -113,7 +143,7 @@ export function Home() {
 
                         <VStack>
                             <Text fontFamily="heading" fontSize={20}>
-                                4
+                                {numberOfActivePosts}
                             </Text>
 
                             <Text>
@@ -164,7 +194,21 @@ export function Home() {
                 <TouchableOpacity onPress={handleOpenFilters}>
                     <Sliders />
                 </TouchableOpacity>
+
+
             </HStack>
+
+
+            <FlatList
+                data={products}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <ProductItemCard
+                        name={item.name}
+                        price={item.price}
+                    />
+                )}
+            />
 
             <BottomSheetModalProvider>
                 <BottomSheetModal
@@ -263,7 +307,7 @@ export function Home() {
                         </Checkbox.Group>
 
 
-                        <Box flex={1} justifyContent="flex-end">
+                        <Box flex={1} justifyContent="flex-end" bg="red.500">
                             <HStack justifyContent="space-between" >
                                 <Box w="48%">
                                     <Button

@@ -1,10 +1,12 @@
-import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { useAuth } from '@hooks/useAuth';
+import { createBottomTabNavigator, BottomTabNavigationProp, BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 
 import { Home } from '@screens/Home';
 import { MyPosts } from '@screens/MyPosts';
 import { useTheme } from 'native-base';
 
 import { HouseSimple, Tag, SignOut } from "phosphor-react-native";
+import { Pressable, TouchableWithoutFeedback } from 'react-native';
 
 type AppRoutesProps = {
     Home: undefined,
@@ -23,6 +25,8 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutesProps>();
 export function AppRoutes() {
 
     const theme = useTheme();
+
+    const { signOut } = useAuth();
 
     return (
         <Navigator
@@ -66,11 +70,20 @@ export function AppRoutes() {
                 name="Logout"
                 component={Logout}
                 options={{
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: () => (
                         <SignOut
-                            color={color}
+                            color={theme.colors.lightRed['500']}
+
+                        />
+                    ),
+
+                    tabBarButton: (props: BottomTabBarButtonProps) => (
+                        <Pressable
+                            {...props}
+                            onPress={signOut}
                         />
                     )
+
                 }}
             />
         </Navigator>
