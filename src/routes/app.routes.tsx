@@ -1,14 +1,23 @@
+import { Pressable } from 'react-native';
 import { useAuth } from '@hooks/useAuth';
 import { createBottomTabNavigator, BottomTabNavigationProp, BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Home } from '@screens/Home';
 import { MyPosts } from '@screens/MyPosts';
+import { NewPost } from '@screens/NewPost';
 import { useTheme } from 'native-base';
 
 import { HouseSimple, Tag, SignOut } from "phosphor-react-native";
-import { Pressable, TouchableWithoutFeedback } from 'react-native';
 
-type AppRoutesProps = {
+import type { CompositeNavigationProp } from '@react-navigation/native';
+
+type StackRoutesProps = {
+    HomeNavigator: undefined;
+    NewPost: undefined;
+};
+
+type BottomTabRoutesProps = {
     Home: undefined,
     MyPosts: undefined,
     Logout: undefined;
@@ -18,18 +27,47 @@ const Logout = function () {
     return null;
 };
 
-export type AuthNavigatorRouteProps = BottomTabNavigationProp<AppRoutesProps>;
+export type AppNavigatorRouteProps = CompositeNavigationProp<
+    BottomTabNavigationProp<BottomTabRoutesProps, "Home">,
+    NativeStackNavigationProp<StackRoutesProps>
+>;
 
-const { Navigator, Screen } = createBottomTabNavigator<AppRoutesProps>();
+const BottomTabNavigator = createBottomTabNavigator<BottomTabRoutesProps>();
+const StackNavigator = createNativeStackNavigator<StackRoutesProps>();
 
 export function AppRoutes() {
+
+    return (
+        <StackNavigator.Navigator
+            screenOptions={{
+                headerShown: false,
+                animation: "slide_from_right"
+            }}
+        >
+            <StackNavigator.Screen
+                name="HomeNavigator"
+                component={HomeNavigator}
+            />
+
+            <StackNavigator.Screen
+                name="NewPost"
+                component={NewPost}
+
+            />
+        </StackNavigator.Navigator>
+    );
+
+
+}
+
+function HomeNavigator() {
 
     const theme = useTheme();
 
     const { signOut } = useAuth();
 
     return (
-        <Navigator
+        <BottomTabNavigator.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -42,10 +80,11 @@ export function AppRoutes() {
                 }
             }}
         >
-            <Screen
+            <BottomTabNavigator.Screen
                 name="Home"
                 component={Home}
                 options={{
+                    headerShown: false,
                     tabBarIcon: ({ color }) => (
                         <HouseSimple
                             color={color}
@@ -54,7 +93,7 @@ export function AppRoutes() {
                 }}
             />
 
-            <Screen
+            <BottomTabNavigator.Screen
                 name="MyPosts"
                 component={MyPosts}
                 options={{
@@ -66,7 +105,7 @@ export function AppRoutes() {
                 }}
             />
 
-            <Screen
+            <BottomTabNavigator.Screen
                 name="Logout"
                 component={Logout}
                 options={{
@@ -86,6 +125,6 @@ export function AppRoutes() {
 
                 }}
             />
-        </Navigator>
+        </BottomTabNavigator.Navigator>
     );
 }

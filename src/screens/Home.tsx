@@ -31,6 +31,10 @@ import { api } from "@services/api";
 import { ProductDTO } from "src/dto/ProductDTO";
 import { ProductItemCard } from "@components/ProductItemCard";
 
+import { useNavigation } from '@react-navigation/native';
+
+import { AppNavigatorRouteProps } from "@routes/app.routes";
+
 export function Home() {
 
     const [payments, setPayments] = useState<string[]>([]);
@@ -45,6 +49,8 @@ export function Home() {
 
     const [numberOfActivePosts, setNumberofActivePosts] = useState(0);
     const [products, setProducts] = useState<ProductDTO[]>([]);
+
+    const navigation = useNavigation<AppNavigatorRouteProps>();
 
     const handleOpenFilters = useCallback(() => {
         bottomSheetModalRef.current?.present();
@@ -65,11 +71,14 @@ export function Home() {
         setProducts(data);
     }
 
+    function handleNewPost() {
+        navigation.navigate("NewPost");
+    }
+
     useEffect(() => {
         loadUserProducts();
         loadProducts();
     }, []);
-
 
     return (
         <VStack
@@ -108,6 +117,7 @@ export function Home() {
                         title="Criar anúncio"
                         type="secondary"
                         icon={<Plus color={theme.colors.gray["600"]} size={16} />}
+                        onPress={handleNewPost}
                     />
                 </Box>
             </HStack>
@@ -172,6 +182,7 @@ export function Home() {
                 p={1}
                 px={3}
                 rounded="md"
+                mb={4}
             >
                 <Input
                     placeholder="Buscar anúncio"
@@ -195,7 +206,6 @@ export function Home() {
                     <Sliders />
                 </TouchableOpacity>
 
-
             </HStack>
 
 
@@ -206,8 +216,17 @@ export function Home() {
                     <ProductItemCard
                         name={item.name}
                         price={item.price}
+                        productImage={item.product_images.length > 0 ? item.product_images[0].path : undefined}
+                        avatarImage={item.user.avatar}
+                        isNew={item.is_new}
                     />
                 )}
+                flex={1}
+                numColumns={2}
+                columnWrapperStyle={{
+                    justifyContent: "space-between"
+                }}
+                showsVerticalScrollIndicator={false}
             />
 
             <BottomSheetModalProvider>

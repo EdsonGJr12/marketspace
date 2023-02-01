@@ -35,6 +35,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
             setUser(storageUser);
 
             const token = await getUserToken();
+
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         } finally {
             setIsAppLoading(false);
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
     async function signIn(email: string, password: string) {
         const { data } = await api.post("/sessions", { email, password });
 
-        api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+        api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
         setUser(data.user);
 
