@@ -235,6 +235,22 @@ export function SignUp() {
                             value={value}
                             autoCapitalize="none"
                             errorMessage={errors.email?.message}
+                            keyboardType="email-address"
+                        />
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="tel"
+                    render={({ field: { onChange, value } }) => (
+                        <Input
+                            placeholder="Telefone"
+                            onChangeText={onChange}
+                            value={value}
+                            autoCapitalize="none"
+                            errorMessage={errors.tel?.message}
+                            keyboardType="number-pad"
                         />
                     )}
                 />

@@ -34,6 +34,7 @@ import { ProductItemCard } from "@components/ProductItemCard";
 import { useNavigation } from '@react-navigation/native';
 
 import { AppNavigatorRouteProps } from "@routes/app.routes";
+import { PaymentOptions } from "@components/PaymentOptions";
 
 export function Home() {
 
@@ -293,38 +294,10 @@ export function Home() {
 
                         <Switch size="lg" alignSelf="flex-start" mb={4} colorScheme="lightBlue" />
 
-                        <Text fontFamily="heading" >
-                            Meios de pagamento aceitos
-                        </Text>
-
-
-                        <Checkbox.Group
+                        <PaymentOptions
                             onChange={setPayments}
                             value={payments}
-                            accessibilityLabel="choose numbers"
-                            colorScheme="lightBlue"
-                        >
-                            <Checkbox value="boleto" mt={2}>
-                                Boleto
-                            </Checkbox>
-
-                            <Checkbox value="pix" mt={2}>
-                                Pix
-                            </Checkbox>
-
-                            <Checkbox value="dinheiro" mt={2}>
-                                Dinheiro
-                            </Checkbox>
-
-                            <Checkbox value="cartao_credito" mt={2}>
-                                Cartão de crédito
-                            </Checkbox>
-
-                            <Checkbox value="deposito_bancario" mt={2}>
-                                Depósito bancário
-                            </Checkbox>
-                        </Checkbox.Group>
-
+                        />
 
                         <Box flex={1} justifyContent="flex-end" bg="red.500">
                             <HStack justifyContent="space-between" >

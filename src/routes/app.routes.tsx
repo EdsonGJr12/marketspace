@@ -11,10 +11,12 @@ import { useTheme } from 'native-base';
 import { HouseSimple, Tag, SignOut } from "phosphor-react-native";
 
 import type { CompositeNavigationProp } from '@react-navigation/native';
+import { NewPostPreview } from '@screens/NewPostPreview';
 
 type StackRoutesProps = {
     HomeNavigator: undefined;
     NewPost: undefined;
+    NewPostPreview: NewPostDTO;
 };
 
 type BottomTabRoutesProps = {
@@ -53,6 +55,11 @@ export function AppRoutes() {
                 name="NewPost"
                 component={NewPost}
 
+            />
+
+            <StackNavigator.Screen
+                name="NewPostPreview"
+                component={NewPostPreview}
             />
         </StackNavigator.Navigator>
     );

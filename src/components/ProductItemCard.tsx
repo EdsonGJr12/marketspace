@@ -1,6 +1,8 @@
 import { api } from "@services/api";
 import { Avatar, Box, Heading, Image, Text, VStack } from "native-base";
 
+import avatarDefault from "@assets/avatar.png";
+
 type ProductItemCardProps = {
     name: string;
     price: number;
@@ -13,14 +15,14 @@ export function ProductItemCard({ name, price, productImage, avatarImage, isNew 
     return (
         <VStack mb={4}>
             <Box h={24} w={40} >
-                <Image
-                    source={{
-                        uri: `${api.defaults.baseURL}/images/${productImage}`
-                    }}
-                    alt="Imagem do produto"
-                    rounded="lg"
-                    flex={1}
-                />
+                <Box flex={1} position="absolute" w="full" h="full" rounded="lg">
+                    <Image
+                        source={!productImage ? avatarDefault : { uri: `${api.defaults.baseURL}/images/${productImage}` }}
+                        alt="Imagem do produto"
+                        flex={1}
+                        w="full"
+                    />
+                </Box>
 
                 <Avatar
                     position="absolute"
@@ -43,7 +45,7 @@ export function ProductItemCard({ name, price, productImage, avatarImage, isNew 
                     rounded="full"
                 >
                     <Text color="white" fontFamily="heading" px={3} py={1}>
-                        NOVO
+                        {isNew ? "NOVO" : "USADO"}
                     </Text>
                 </Box>
 

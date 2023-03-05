@@ -36,6 +36,8 @@ export function AuthProvider({ children }: AuthContextProviderProps) {
 
             const token = await getUserToken();
 
+            console.log(token)
+
             api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         } finally {
             setIsAppLoading(false);

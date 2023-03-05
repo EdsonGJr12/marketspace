@@ -1,10 +1,16 @@
+import { ReactNode } from "react";
 import { Input as InputNativeBase, IInputProps, FormControl } from "native-base";
 
 type InputProps = IInputProps & {
+    LeftComponent?: ReactNode;
     errorMessage?: string;
 };
 
-export function Input({ errorMessage, isInvalid, ...rest }: InputProps) {
+export function Input({
+    errorMessage,
+    isInvalid,
+    ...rest
+}: InputProps) {
 
     const isInputInvalid = !!errorMessage || isInvalid;
 
@@ -15,7 +21,6 @@ export function Input({ errorMessage, isInvalid, ...rest }: InputProps) {
                 bg="gray.700"
                 borderWidth={0}
                 rounded="md"
-                h={14}
                 placeholderTextColor="gray.400"
                 fontFamily="body"
                 fontSize="md"
